@@ -25,6 +25,7 @@ class Reservation extends Model
         'due_date' => 'datetime',
         'returned_at' => 'datetime',
         'fine_amount' => 'decimal:2',
+        'status' => ReservationStatus::class,
     ];
 
     public function user()
@@ -61,10 +62,6 @@ class Reservation extends Model
     {
         static::creating(function (Reservation $reservation) {
 
-            if (empty($reservation->reserved_at)) {
-                $reservation->reserved_at = now();
-            }
-
             $reservation->due_date = Carbon::parse($reservation->reserved_at)->addDays(14);
 
             if (is_null($reservation->status)) {
@@ -92,3 +89,4 @@ class Reservation extends Model
         });
     }
 }
+

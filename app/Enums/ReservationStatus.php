@@ -2,11 +2,11 @@
 
 namespace App\Enums;
 
-enum ReservationStatus: string
+enum ReservationStatus: int
 {
-    case ACTIVE   = 'active';
-    case RETURNED = 'returned';
-    case OVERDUE  = 'overdue';
+    case ACTIVE   = 1;
+    case RETURNED = 2;
+    case OVERDUE  = 3;
 }
 
 

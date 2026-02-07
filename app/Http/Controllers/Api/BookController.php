@@ -10,7 +10,7 @@ use App\Helpers\ResponseHelper;
 
 class BookController extends Controller
 {
-    private BookService $bookService;
+     protected $bookService;
 
     public function __construct(BookService $bookService)
     {

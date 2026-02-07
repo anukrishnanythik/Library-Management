@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->enum('role', ['member', 'librarian'])->default('member')->index();
             $table->softDeletes();
         });
