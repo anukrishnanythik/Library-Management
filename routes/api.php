@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\ReportController;
 
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:login');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::middleware('role:librarian')->group(function () {
+        Route::post('/reservations/{reservation}/return', [ReservationController::class, 'return']);
         Route::apiResource('books', BookController::class)->only(['store', 'update', 'destroy']);
 
         // Reports
