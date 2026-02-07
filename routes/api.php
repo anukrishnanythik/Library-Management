@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\BookController;
+use App\Http\Controllers\Api\ReportController;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'login');
@@ -24,8 +25,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/books/search/{query}', [BookController::class, 'search']);
     });
-});
 
-Route::get('/test', function () {
-    return response()->json(['message' => 'API is working!']);
+    Route::middleware('role:librarian')->group(function () {
+       
+        // Reports
+        Route::controller(ReportController::class)->group(function () {
+            Route::get('/reports/overdue', 'overdue');
+        });
+    });
 });
