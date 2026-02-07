@@ -8,29 +8,23 @@ use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\ReportController;
 
-Route::controller(AuthController::class)->group(function () {
-    Route::post('/login', 'login');
-});
+Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::controller(AuthController::class)->group(function () {
-        Route::post('/logout', 'logout');
-    });
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/books/search/{query}', [BookController::class, 'search']);
 
     Route::middleware('role:member')->group(function () {
         Route::controller(ReservationController::class)->group(function () {
-            Route::post('/reservations', 'store');
+            Route::post('/reservations', 'create');
             Route::get('/reservations/my', 'view');
         });
-
-        Route::get('/books/search/{query}', [BookController::class, 'search']);
     });
 
     Route::middleware('role:librarian')->group(function () {
-       
+        Route::apiResource('books', BookController::class)->only(['store', 'update', 'destroy']);
+
         // Reports
-        Route::controller(ReportController::class)->group(function () {
-            Route::get('/reports/overdue', 'overdue');
-        });
+        Route::get('/reports/overdue', [ReportController::class, 'overdue']);
     });
 });
