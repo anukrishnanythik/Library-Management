@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Exception;
 use App\Helpers\ResponseHelper;
 use App\Services\ReservationService;
+use App\Enums\ReservationStatus;
+
 
 class ReservationController extends Controller
 {
@@ -53,6 +55,12 @@ class ReservationController extends Controller
     public function return(Reservation $reservation)
     {
         try {
+            if ($reservation->status === ReservationStatus::RETURNED) {
+                return ResponseHelper::ok(
+                    $reservation,
+                    "This book was already returned on {$reservation->returned_at->format('Y-m-d H:i:s')}"
+                );
+            }
             $reservation = $this->reservationService->returnBook($reservation);
 
             return ResponseHelper::ok($reservation, 'Book returned successfully');

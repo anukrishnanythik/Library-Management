@@ -16,6 +16,16 @@ class ReportController extends Controller
         $this->reportService = $reportService;
     }
 
+    public function reservations()
+    {
+        try {
+            $reservations = $this->reportService->getAllReservations();
+            return ResponseHelper::ok($reservations, 'Reservations fetched successfully');
+        } catch (Exception $e) {
+            return ResponseHelper::incorrectValues($e->getMessage());
+        }
+    }
+
     public function overdue()
     {
         try {

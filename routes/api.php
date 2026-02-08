@@ -26,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('books', BookController::class)->only(['store', 'update', 'destroy']);
 
         // Reports
+        Route::get('/reports/reservations', [ReportController::class, 'reservations']);
         Route::get('/reports/overdue', [ReportController::class, 'overdue']);
     });
 });

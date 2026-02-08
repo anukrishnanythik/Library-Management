@@ -38,9 +38,11 @@ class Reservation extends Model
         return $this->belongsTo(Book::class);
     }
 
-    public function getRemainingDaysAttribute(): int
+    public function getOverdueDaysAttribute(): int
     {
-        return now()->diffInDays($this->due_date, false);
+        $days = now()->startOfDay()
+            ->diffInDays($this->due_date->startOfDay(), false);
+             return max(0, -$days);
     }
 
     public function scopeActive(Builder $query): Builder

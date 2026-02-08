@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Reservation;
 use App\Models\Book;
 use App\Models\User;
+use App\Notifications\ReservationReturned;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ReservationStatus;
 
@@ -39,14 +40,9 @@ class ReservationService
             ->get();
     }
 
-
     private function calculateFine(Reservation $reservation): float
     {
-        if (now()->lessThanOrEqualTo($reservation->due_date)) {
-            return 0;
-        }
-
-        $daysOverdue = now()->diffInDays($reservation->due_date);
+        $daysOverdue = (int) ($reservation->overdue_days ?? 0);
 
         if ($daysOverdue <= 7) {
             return 0;
@@ -66,9 +62,7 @@ class ReservationService
     public function returnBook(Reservation $reservation): Reservation
     {
         return DB::transaction(function () use ($reservation) {
-            if ($reservation->status === ReservationStatus::RETURNED) {
-                return $reservation();
-            }
+            $reservation = Reservation::where('id', $reservation->id)->lockForUpdate()->first();
 
             $fineAmount = $this->calculateFine($reservation);
 
@@ -87,7 +81,9 @@ class ReservationService
                 'fine_amount' => $fineAmount,
             ]);
 
-            return $reservation;
+            $reservation->user->notify(new ReservationReturned($reservation));
+
+            return $reservation->fresh();
         });
     }
 }
