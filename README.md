@@ -49,8 +49,8 @@ Authorization: Bearer {token}
 - Books
 GET /books/search/{query} – Search books
 POST /books – Create book (librarian)
-PUT /books/{id} – Update book (librarian)
-DELETE /books/{id} – Delete book (librarian)
+PUT /books/{uuid} – Update book (librarian)
+DELETE /books/{uuid} – Delete book (librarian)
 
 - Reservations
 POST /reservations – Create reservation (member)
