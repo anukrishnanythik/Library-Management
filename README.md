@@ -2,7 +2,6 @@ Library-Management
  A modern, high-performance RESTful API built with Laravel 12 to manage library operations. This system handles book inventory, member reservations, automated fine calculations, and librarian administrative workflows.
 
 Tech Stack
-
 - Laravel 12
 - MySQL
 - Laravel Sanctum
@@ -35,5 +34,32 @@ Members: Browse and reserve books.
 # Quick Test Credentials
 Once seeded, you can use credentials in .env to test
 
+# Api documentation
+- Base URL: http://127.0.0.1:8000/api
+- Authentication: Laravel Sanctum
+- Authorization: Role-based (member, librarian)
+
+- Authentication
+POST /login – User login (rate-limited)
+POST /logout – Logout (authenticated)
+
+- All protected endpoints require:
+Authorization: Bearer {token}
+
+- Books
+GET /books/search/{query} – Search books
+POST /books – Create book (librarian)
+PUT /books/{id} – Update book (librarian)
+DELETE /books/{id} – Delete book (librarian)
+
+- Reservations
+POST /reservations – Create reservation (member)
+GET /reservations/my – View own reservations (member)
+POST /reservations/{reservation}/return – Return book (librarian)
+
+- Reports (Librarian)
+GET /reports/reservations – Reservation summary
+GET /reports/overdue – Overdue reservations report
+
 Api postman collection
-https://app.getpostman.com/join-team?invite_code=fd3be2db975173dd8a86d307474844b0c191e246eff4b1a00c4f41fbad81220f&target_code=d3622cfa24e5d4a494f40f9376f339cb
+https://restless-trinity-771432.postman.co/workspace/Personal-Workspace~03c33991-8b9a-442b-8637-857f96e04413/collection/27618526-c1e97c89-a26b-4a76-b440-436f0f9179aa?action=share&creator=27618526
