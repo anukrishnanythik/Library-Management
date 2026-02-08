@@ -61,7 +61,7 @@ class ReservationController extends Controller
                     "This book was already returned on {$reservation->returned_at->format('Y-m-d H:i:s')}"
                 );
             }
-            $reservation = $this->reservationService->returnBook($reservation);
+            $reservation = $this->reservationService->processReturn($reservation);
 
             return ResponseHelper::ok($reservation, 'Book returned successfully');
         } catch (Exception $e) {

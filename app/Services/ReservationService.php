@@ -8,13 +8,26 @@ use App\Models\User;
 use App\Notifications\ReservationReturned;
 use Illuminate\Support\Facades\DB;
 use App\Enums\ReservationStatus;
+use App\Helpers\ResponseHelper;
 
 class ReservationService
 {
     public function createReservation(User $user, Book $book): Reservation
     {
         return DB::transaction(function () use ($user, $book) {
-            $book = Book::where('id', $book->id)->lockForUpdate()->first();
+            $book = Book::where('id', $book->id)
+            ->lockForUpdate()
+            ->first();
+
+            if (!$book) {
+                 return ResponseHelper::incorrectValues("Book not found");
+            }
+
+            if ($book->available_copies <= 0) {
+                 return ResponseHelper::incorrectValues("Book is no longer available");
+            }
+
+            $book->decrement('available_copies');
 
             $reservation = Reservation::create([
                 'user_id' => $user->id,
@@ -25,7 +38,6 @@ class ReservationService
                 'fine_amount' => 0,
             ]);
 
-            $book->decrement('available_copies');
 
             return $reservation;
         });
@@ -59,7 +71,7 @@ class ReservationService
         return (float) $fine;
     }
 
-    public function returnBook(Reservation $reservation): Reservation
+    public function processReturn(Reservation $reservation): Reservation
     {
         return DB::transaction(function () use ($reservation) {
             $reservation = Reservation::where('id', $reservation->id)->lockForUpdate()->first();

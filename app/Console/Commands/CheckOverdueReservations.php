@@ -7,7 +7,7 @@ use App\Enums\ReservationStatus;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Log;
 
-class MarkOverdueReservations extends Command
+class CheckOverdueReservations extends Command
 {
     /**
      * The name and signature of the console command.
