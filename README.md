@@ -36,4 +36,4 @@ Members: Browse and reserve books.
 Once seeded, you can use credentials in .env to test
 
 Api postman collection
-https://restless-trinity-771432.postman.co/workspace/Personal-Workspace~03c33991-8b9a-442b-8637-857f96e04413/collection/27618526-c1e97c89-a26b-4a76-b440-436f0f9179aa?action=share&creator=27618526
+https://app.getpostman.com/join-team?invite_code=fd3be2db975173dd8a86d307474844b0c191e246eff4b1a00c4f41fbad81220f&target_code=d3622cfa24e5d4a494f40f9376f339cb
